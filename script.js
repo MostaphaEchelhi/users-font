@@ -1,20 +1,25 @@
-let usersList = document.getElementById("usersList");
+import {printLoginForm, printLogoutBtn } from "./userForm.js"
+
+let root = document.getElementById("root");
+let showUserListBtn = document.getElementById("showUserListBtn");
+
 let newUser = document.getElementById("newUser");
 let newUserPassword = document.getElementById("newUserPassword")
 let saveUserBtn = document.getElementById("saveUserBtn");
-let loginUsername = document.getElementById("loginUsername");
-let loginPassword = document.getElementById("loginPassword")
-let loginUserBtn = document.getElementById("loginUserBtn");
+//let loginUsername = document.getElementById("loginUsername");
+//let loginPassword = document.getElementById("loginPassword")
+//let loginUserBtn = document.getElementById("loginUserBtn");
 let UserGreeting = document.getElementById("UserGreeting");
 
+if (localStorage.getItem("username")) {
+    console.log("är inloggad")
+    printLogoutBtn();
+} else {
+    console.log("är ej inloggad");
+    printLoginForm();
+}
 
 
-fetch("http://localhost:3000/users")
-.then(res => res.json())
-.then(data => {
-    //console.log(data);
-    printUsers(data);
-});    
 
 let loggedInUser = localStorage.getItem("username");
 
@@ -22,11 +27,18 @@ if (loggedInUser) {
     UserGreeting.innerText = "Godmorgon " + loggedInUser;
 }
 
+showUserListBtn.addEventListener("click", printUserList);
 
+function printUserList() {
+    
+    fetch("http://localhost:3000/users")
+    .then(res => res.json())
+    .then(users => {
+    //console.log(data);
 
-function printUsers(users) {
     console.log(users);
 
+    let usersList = document.createElement("ul");
     usersList.innerHTML = "";
 
     users.map(user => {
@@ -35,6 +47,35 @@ function printUsers(users) {
         li.innerText = user.name;
         usersList.appendChild(li);
     })
+
+    usersList.addEventListener("click", (e) => {
+        console.log("click på lista", e.target.id);
+
+        printUserInfo(e.target.id);
+    })
+
+    function printUserInfo(userId) {
+        //console.log("Visar att det funkar");
+
+        fetch("http://localhost:3000/users/" + userId)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+        
+
+        let userInfoDiv = document.createElement("div")
+        userInfoDiv.innerHTML = "<p>" + data.name + "<br/>" + data.password + "</p>";
+
+        root.append(userInfoDiv);
+        })
+    }
+
+    root.appendChild(usersList);
+
+    });    
+    
+ 
+
 }
 
 saveUserBtn.addEventListener("click", () => {
@@ -57,32 +98,3 @@ saveUserBtn.addEventListener("click", () => {
 
 })
 
-loginUserBtn.addEventListener("click", () => {
-    
-    let loginUser = {
-        name: loginUsername.value,
-        password: loginPassword.value
-    } 
-    console.log(loginUser);
-
-    fetch("http://localhost:3000/users/login", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json", 
-    },
-    body: JSON.stringify(loginUser)
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data)
-        if (data.name) {
-            UserGreeting.innerText = "Godmorgon " + data.name;
-            localStorage.setItem("username", data.name);
-        } else {
-            UserGreeting.innerText = "Fel lösenord eller användarnamn";
-        }
-    });
-    loginUsername.value = "";
-    loginPassword.value = "";
-
-});

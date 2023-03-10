@@ -5,23 +5,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="script.js" defer></script>
+    <script src="script.js" defer type="module"></script>
 </head>
 <body>
-    <h1>Hello Users</h1>
-    <ul id="usersList"></ul>
+
+    <div id="head">
+        <h1>Hello Users</h1>
+        <div id="meny"><button id="showUserListBtn">Visa användare</button></div>
+        <div id="userForm"></div>
+    </div>
+
+    <div id="root"></div>
+
+
+    <div id="footer">Våran fot</div>
+    
+   <!--<<ul id="usersList"></ul>-->
 
     <div>
         <input type="text" placeholder="Namn" id="newUser">
         <input type="text" placeholder="Password" id="newUserPassword">
         <button id="saveUserBtn">Spara</button>
     </div>
-    <div>
+    <!--<div>
         <h3>Logga in här:</h3>
         <input type="text" placeholder="Användarnamn" id="loginUsername">
         <input type="text" placeholder="Lösernord" id="loginPassword">
         <button id="loginUserBtn">Logga in</button>
-    </div>
+    </div>-->
     <h2 id="UserGreeting">Godmorgon!</h2>
 </body>
 </html>
