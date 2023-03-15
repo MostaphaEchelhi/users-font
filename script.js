@@ -54,27 +54,32 @@ function printUserList() {
         printUserInfo(e.target.id);
     })
 
-    function printUserInfo(userId) {
-        //console.log("Visar att det funkar");
-
-        fetch("http://localhost:3000/users/" + userId)
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-        
-
-        let userInfoDiv = document.createElement("div")
-        userInfoDiv.innerHTML = "<p>" + data.name + "<br/>" + data.password + "</p>";
-
-        root.append(userInfoDiv);
-        })
-    }
-
+    root.innerHTML = "";
     root.appendChild(usersList);
 
-    });    
+});    
+
+
+
+function printUserInfo(userId) {
+    //console.log("Visar att det funkar");
+
+    fetch("http://localhost:3000/users/" + userId)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
     
- 
+
+    let userInfoDiv = document.createElement("div")
+    userInfoDiv.innerHTML = "<p>" + data.name + "<br/>" + data.password + "</p>";
+    root.innerHTML = "";
+    root.append(userInfoDiv);
+    })
+}
+
+
+
+
 
 }
 
@@ -91,7 +96,7 @@ saveUserBtn.addEventListener("click", () => {
     })
     .then(res => res.json())
     .then(data => {
-        printUsers(data);
+        printUserList(data);
     });
     newUser.value = "";
     newUserPassword.value = "";
