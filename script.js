@@ -64,16 +64,22 @@ function printUserList() {
 function printUserInfo(userId) {
     //console.log("Visar att det funkar");
 
-    fetch("http://localhost:3000/users/" + userId)
+    fetch("http://localhost:3000/users/" + userId + "/apihemlighet")
     .then(res => res.json())
     .then(data => {
         console.log(data);
     
-
+// KOLLA OM 401, SKRIV NÅGOT SNÄLLT TILL BESÖKAREN 
+//ANNARS
     let userInfoDiv = document.createElement("div")
     userInfoDiv.innerHTML = "<p>" + data.name + "<br/>" + data.password + "</p>";
     root.innerHTML = "";
     root.append(userInfoDiv);
+    })
+    .catch(err => console.log("err", err))
+    .finally(final => {
+        document.body.innerHTML = "<h1>NEJ</h1>";
+        console.log("final". final);
     })
 }
 
